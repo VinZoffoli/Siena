@@ -423,7 +423,7 @@
               "contains_alcohol": false,
               "item_type": "food",
               "currency": "ARS",
-              "image": "/assets/menu/mediterranean-branzino.webp"
+              "image": "/assets/menu/mediterranean-branzino-v2.webp"
             }
           ]
         },
@@ -645,6 +645,26 @@
               "price": "13",
               "rawPrice": {
                 "base_price": 13,
+                "base_price_max": null,
+                "base_is_price_range": false,
+                "price_variants": null
+              },
+              "tags": [],
+              "allergens": [],
+              "is_vegan": false,
+              "is_gluten_free": false,
+              "contains_alcohol": false,
+              "item_type": "food",
+              "currency": "ARS"
+            },
+            {
+              "id": "723e3bfd-b5f6-4ad6-ade3-6367eef12f93",
+              "image": "",
+              "name": "Pistachio Creme Brulee",
+              "description": "Classic vanilla bean crème brûlée with a perfectly caramelized sugar crust, finished with silky pistachio crème, delicate chocolate shavings, and crushed pistachios.",
+              "price": "14",
+              "rawPrice": {
+                "base_price": 14,
                 "base_price_max": null,
                 "base_is_price_range": false,
                 "price_variants": null
