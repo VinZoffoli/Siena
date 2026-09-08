@@ -42,7 +42,7 @@ export default function Events() {
           animate={{ scale: 1 }}
           transition={{ duration: 1.4, ease: "easeOut" }}
         >
-          <Image src="/assets/hero5.webp" alt="Events at Siena" fill className="object-cover object-[50%_40%]" priority sizes="100vw" />
+          <Image src="/assets/pages/Events/Events-Hero-optimized.jpg" alt="Events at Siena" fill className="object-cover object-[50%_40%]" priority sizes="100vw" />
         </motion.div>
         <div className="absolute inset-0 bg-black/55" />
         <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-4 pt-14 md:pt-16">
@@ -273,7 +273,7 @@ export default function Events() {
             >
               <div className="relative overflow-hidden">
                 <img
-                  src="/assets/hero6.webp"
+                  src="/assets/pages/Events/what-we-offer-optimized.jpg"
                   alt="Siena event space"
                   className="w-full h-[300px] md:h-[480px] object-cover"
                   loading="lazy"
