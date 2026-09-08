@@ -380,6 +380,12 @@ export default function Checkout() {
                   );
                 })}
               </div>
+              <Link
+                href="/order-online"
+                className="mt-4 w-full flex items-center justify-center border border-white/25 text-white py-3 text-[13px] uppercase tracking-[0.08em] font-medium hover:border-[#e0b265]/60 hover:text-[#e0b265] transition-colors"
+              >
+                Add More Items
+              </Link>
             </div>
           </div>
         )}
