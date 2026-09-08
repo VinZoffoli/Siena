@@ -11,6 +11,10 @@ for (let i = 1; i <= 43; i++) {
   }
 }
 
+for (let i = 45; i <= 186; i++) {
+  images.push(`/assets/gallery${i}.webp`);
+}
+
 const TOTAL = images.length;
 
 export default function Gallery() {
