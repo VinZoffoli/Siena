@@ -490,7 +490,7 @@ export default function Home() {
               transition={{ duration: 0.38, delay: 0, ease: "easeOut" }}
               whileHover={{ y: -6, transition: { duration: 0.22 } }}
             >
-              <Image src="/assets/menu1.webp" alt="Dinner" fill quality={65} sizes="(max-width: 767px) 100vw, 390px" loading="lazy" className="object-cover transition-transform duration-500 group-hover:scale-110" />
+              <Image src="/assets/pages/Home/ETF-Dinner.jpg" alt="Dinner" fill quality={65} sizes="(max-width: 767px) 100vw, 390px" loading="lazy" className="object-cover transition-transform duration-500 group-hover:scale-110" />
               <div className="absolute inset-0 bg-black/50 group-hover:bg-black/30 transition-colors duration-500" />
 
               <div className="absolute inset-4 border border-[#e0b265]">
@@ -522,7 +522,7 @@ export default function Home() {
               transition={{ duration: 0.38, delay: 0.08, ease: "easeOut" }}
               whileHover={{ y: -6, transition: { duration: 0.22 } }}
             >
-              <Image src="/assets/about1.webp" alt="Brunch" fill quality={65} sizes="(max-width: 767px) 100vw, 390px" loading="lazy" className="object-cover transition-transform duration-500 group-hover:scale-110" />
+              <Image src="/assets/pages/Home/ETF-Brunch.jpg" alt="Brunch" fill quality={65} sizes="(max-width: 767px) 100vw, 390px" loading="lazy" className="object-cover transition-transform duration-500 group-hover:scale-110" />
               <div className="absolute inset-0 bg-black/50 group-hover:bg-black/30 transition-colors duration-500" />
 
               <div className="absolute inset-4 border border-[#e0b265]">
@@ -552,7 +552,7 @@ export default function Home() {
               transition={{ duration: 0.38, delay: 0.12, ease: "easeOut" }}
               whileHover={{ y: -6, transition: { duration: 0.22 } }}
             >
-              <Image src="/assets/about3.webp" alt="Happy Hour" fill sizes="(max-width: 767px) 100vw, 390px" loading="lazy" className="object-cover transition-transform duration-500 group-hover:scale-110" />
+              <Image src="/assets/pages/Home/ETF-HappyHour.jpg" alt="Happy Hour" fill sizes="(max-width: 767px) 100vw, 390px" loading="lazy" className="object-cover transition-transform duration-500 group-hover:scale-110" />
               <div className="absolute inset-0 bg-black/50 group-hover:bg-black/30 transition-colors duration-500" />
 
               <div className="absolute inset-4 border border-[#e0b265]">
@@ -582,7 +582,7 @@ export default function Home() {
               transition={{ duration: 0.38, delay: 0.18, ease: "easeOut" }}
               whileHover={{ y: -6, transition: { duration: 0.22 } }}
             >
-              <Image src="/assets/pages/Home/ETF-Beverages-landscape.jpg" alt="Beverages" fill sizes="(max-width: 767px) 100vw, 66vw" loading="lazy" className="object-cover transition-transform duration-500 group-hover:scale-110" />
+              <Image src="/assets/pages/Home/ETF-Beverages-2-landscape.jpg" alt="Beverages" fill sizes="(max-width: 767px) 100vw, 66vw" loading="lazy" className="object-cover transition-transform duration-500 group-hover:scale-110" />
               <div className="absolute inset-0 bg-black/50 group-hover:bg-black/30 transition-colors duration-500" />
 
               <div className="absolute inset-4 border border-[#e0b265]">
