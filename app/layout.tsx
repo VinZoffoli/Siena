@@ -7,6 +7,7 @@ import ScrollToTop from "../components/ScrollToTop";
 import LazyBackgrounds from "../components/LazyBackgrounds";
 import LocalSeoLinks from "../components/LocalSeoLinks";
 import { getRestaurantInfo } from "@/lib/restaurant";
+import { REVIEW_STATS } from "@/lib/reviews";
 
 const GTM_ID = "GTM-N593KQGJ";
 const TIKTOK_PIXEL_ID = "DA8D6C3C77UES9745N50";
@@ -124,7 +125,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     hasMenu: "https://sienaatl.com/menus",
     servesCuisine: ["Italian", "Mediterranean"],
     acceptsReservations: "https://sienaatl.com/reservations",
-    hasMap: "https://maps.app.goo.gl/qAEv8rdegv8rYr1c8",
+    hasMap: info.maps_url,
     areaServed: {
       "@type": "City",
       name: "Alpharetta",
@@ -151,10 +152,19 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       "https://www.instagram.com/sienaatl/",
       "https://www.tiktok.com/@sienaatl",
       "https://www.threads.net/@sienaatl",
-      "https://maps.app.goo.gl/qAEv8rdegv8rYr1c8",
+      info.maps_url,
       "https://www.opentable.com/r/siena-restaurant-alpharetta",
       "https://www.tripadvisor.com/Restaurant_Review-g29196-d34075603-Reviews-Siena_Restaurant-Alpharetta_Georgia.html",
     ],
+    // Sourced from the same Google Business Profile figures used for the
+    // on-page star rating (lib/reviews.ts) — real numbers, checked quarterly,
+    // never fabricated. reviewCount is a floor ("240+"), so it understates
+    // rather than risks overstating.
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: REVIEW_STATS.rating,
+      reviewCount: REVIEW_STATS.countFloor,
+    },
     potentialAction: {
       "@type": "ReserveAction",
       target: {

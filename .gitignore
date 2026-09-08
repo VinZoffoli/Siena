@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Raw video sources — exceed GitHub's 100MB file limit. Transcode to a web-
+# sized version under public/assets/ (e.g. hero_video*.mp4) before committing.
+public/assets/Video.mp4

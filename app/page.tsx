@@ -24,7 +24,10 @@ import { preload } from "react-dom";
 const PARTY_SIZES = Array.from({ length: 14 }, (_, i) => i + 1);
 
 const EventsSlider = dynamic(() => import("@/components/EventsSlider"), { ssr: false });
-const TestimonialsSlider = dynamic(() => import("@/components/TestimonialsSlider"), { ssr: false });
+// SSR enabled (unlike the other two below) so the 9 real Google reviews it
+// renders exist in server HTML for crawlers, instead of only appearing after
+// client JS mounts.
+const TestimonialsSlider = dynamic(() => import("@/components/TestimonialsSlider"));
 const VideosSection = dynamic(() => import("@/components/VideosSection"), { ssr: false });
 
 const slides = [
@@ -93,8 +96,8 @@ export default function Home() {
             used to be a separate <Image> and the video, and it is what LCP
             measures. See eagerPoster in LazyVideo for why that matters. */}
         <LazyVideo
-          src="/assets/hero_video.mp4"
-          mobileSrc="/assets/hero_video_mobile.mp4"
+          src="/assets/hero_video_v2.mp4"
+          mobileSrc="/assets/hero_video_mobile_v2.mp4"
           poster="/assets/hero_poster.webp"
           eagerPoster
           className="absolute inset-0 w-full h-full object-cover"
@@ -194,7 +197,7 @@ export default function Home() {
         <div className="w-full max-w-[1180px] absolute bottom-0 left-1/2 -translate-x-1/2 z-10 py-4 hidden md:flex items-center justify-between">
           {/* Ubicación */}
           <a
-            href="https://maps.app.goo.gl/qAEv8rdegv8rYr1c8"
+            href={info.maps_url}
             target="_blank"
             rel="noopener noreferrer"
             className="group flex items-center gap-2 text-white/80 text-[14px] md:text-[16px] tracking-wide hover:text-[#E0B265] transition text-center"
