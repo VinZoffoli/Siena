@@ -582,7 +582,7 @@ export default function Home() {
               transition={{ duration: 0.38, delay: 0.18, ease: "easeOut" }}
               whileHover={{ y: -6, transition: { duration: 0.22 } }}
             >
-              <Image src="/assets/menu4.webp" alt="Beverages" fill sizes="(max-width: 767px) 100vw, 66vw" loading="lazy" className="object-cover transition-transform duration-500 group-hover:scale-110" />
+              <Image src="/assets/pages/Home/ETF-Beverages-landscape.jpg" alt="Beverages" fill sizes="(max-width: 767px) 100vw, 66vw" loading="lazy" className="object-cover transition-transform duration-500 group-hover:scale-110" />
               <div className="absolute inset-0 bg-black/50 group-hover:bg-black/30 transition-colors duration-500" />
 
               <div className="absolute inset-4 border border-[#e0b265]">
