@@ -17,7 +17,7 @@ export default function AboutUs() {
           transition={{ duration: 1.4, ease: "easeOut" }}
         >
           <Image
-            src="/assets/Siena_20.03.26-A-01.webp"
+            src="/assets/pages/About-us/AboutusHero-aerial.jpg"
             alt="About Siena"
             fill
             className="object-cover object-center"
