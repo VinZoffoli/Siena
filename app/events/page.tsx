@@ -176,6 +176,8 @@ export default function Events() {
         </div>
       </section>
 
+      <ViewOurSpace />
+
       {/* DIVIDER */}
       <section className="relative w-full h-[58px]">
         <img src="/assets/divisor_negro.svg" alt="" className="absolute inset-0 w-full h-full object-cover" />
@@ -251,8 +253,6 @@ export default function Events() {
           </div>
         </div>
       </section>
-
-      <ViewOurSpace />
 
       {/* DIVIDER */}
       <section className="relative w-full h-[40px] md:h-[58px] overflow-hidden bg-[#f4eedd]">
