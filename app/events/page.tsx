@@ -3,6 +3,7 @@ import Image from "next/image";
 import { motion } from "motion/react";
 import EventsSlider from "@/components/EventsSlider";
 import TestimonialsSlider from "@/components/TestimonialsSlider";
+import ViewOurSpace from "@/components/ViewOurSpace";
 
 const steps = [
   {
@@ -250,6 +251,8 @@ export default function Events() {
           </div>
         </div>
       </section>
+
+      <ViewOurSpace />
 
       {/* DIVIDER */}
       <section className="relative w-full h-[40px] md:h-[58px] overflow-hidden bg-[#f4eedd]">
