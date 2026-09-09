@@ -120,7 +120,7 @@ export default function Header() {
                     {/* Right side */}
                     <div className="flex items-center gap-2 md:gap-2 lg:gap-4">
                         <Link href="/order-online" className="hidden lg:block">
-                            <button className="cursor-pointer px-3 py-[11px] font-normal text-[12px] leading-[18px] tracking-wide border border-white bg-[#1B312E] text-white transition hover:bg-white hover:text-[#1B312E] whitespace-nowrap">
+                            <button className="cursor-pointer px-3 py-[11px] font-normal text-[12px] leading-[18px] tracking-wide border border-[#E0B265] bg-[#1B312E]/50 backdrop-blur-sm text-[#E0B265] transition hover:bg-[#E0B265] hover:text-[#1B312E] whitespace-nowrap">
                                 ORDER ONLINE
                             </button>
                         </Link>
