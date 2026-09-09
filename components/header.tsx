@@ -30,6 +30,7 @@ export default function Header() {
     const mobileLinks = [
         { href: "/", label: "Home" },
         { href: "/menus", label: "Menu" },
+        { href: "/order-online", label: "Order Online" },
         { href: "/events", label: "Events" },
         { href: "/live-music-fridays", label: "Live Music Fridays" },
         { href: "/reservations", label: "Reservations" },
@@ -65,7 +66,7 @@ export default function Header() {
                     </Link>
 
                     {/* Nav Desktop */}
-                    <nav className="hidden md:flex items-center gap-4 text-[15px] font-normal uppercase tracking-wide absolute left-1/2 -translate-x-1/2">
+                    <nav className="hidden md:flex items-center gap-0 lg:gap-1 text-[15px] font-normal uppercase tracking-wide absolute left-1/2 -translate-x-1/2">
                         <Link href="/" className={`px-3 flex justify-center relative text-white ${scrolled && pathname === "/" ? "text-[#E0B265] after:w-full" : ""
                             } after:absolute after:left-0 after:-bottom-3 after:h-[2px] after:bg-current after:w-0 after:transition-all after:duration-300 hover:after:w-full`}>
                             Home
@@ -117,9 +118,19 @@ export default function Header() {
                     </nav>
 
                     {/* Right side */}
-                    <div className="flex items-center gap-2 md:gap-4">
+                    <div className="flex items-center gap-2 md:gap-2 lg:gap-4">
+                        <Link href="/order-online" className="hidden lg:block">
+                            <button
+                                className={`cursor-pointer px-3 py-1.5 font-normal text-[12px] leading-[18px] tracking-wide border transition bg-transparent hover:bg-[#E0B265] hover:text-[#1B312E] whitespace-nowrap ${
+                                    scrolled ? "border-[#E0B265] text-[#E0B265]" : "border-white text-white"
+                                }`}
+                            >
+                                ORDER ONLINE
+                            </button>
+                        </Link>
+
                         <Link href="/reservations">
-                            <button className="cursor-pointer px-4 md:px-9 py-2 font-normal text-[14px] md:text-[15px] leading-[20px] md:leading-[24px] tracking-wide border transition bg-[#E0B265] text-[#1B312E] border-transparent hover:bg-white hover:text-[#1B312E] hover:border-white">
+                            <button className="cursor-pointer px-4 lg:px-6 py-1.5 font-normal text-[12px] lg:text-[13px] leading-[18px] tracking-wide border transition bg-[#E0B265] text-[#1B312E] border-transparent hover:bg-white hover:text-[#1B312E] hover:border-white">
                                 RESERVATIONS
                             </button>
                         </Link>

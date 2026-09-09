@@ -222,7 +222,7 @@ function MenuContent() {
           transition={{ duration: 1.4, ease: "easeOut" }}
         >
           <Image
-            src="/assets/Siena_20.03.26-PS-NarissaChickenLolipapas.webp"
+            src="/assets/pages/Menu/menu-hero.webp"
             alt="Menu at Siena"
             fill
             preload

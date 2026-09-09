@@ -44,8 +44,8 @@ export default function Footer() {
 
     return (
 
-        <footer data-bg="/assets/book-table-bg.jpg" className="relative font-sans w-full bg-cover bg-center bg-no-repeat">
-            <div className="absolute inset-0 bg-[#1b312e]/85 pointer-events-none" />
+        <footer data-bg="/assets/footer-bg-siena.webp" className="relative font-sans w-full bg-cover bg-center bg-no-repeat">
+            <div className="absolute inset-0 bg-black/80 pointer-events-none" />
 
             <div className="relative z-10">
                 <NewsletterForm />
@@ -90,17 +90,29 @@ export default function Footer() {
                         </span>
                     </a>
 
-                    {/* Botón mejorado */}
-                    <a
-                        href="/reservations"
-                        className="relative bg-[#e0b265] text-[#1b312e] px-[24px] py-[12px] h-[46px] font-normal text-[18px] lg:text-[15px] leading-[20px] flex items-center gap-2 w-fit overflow-hidden group mt-3 uppercase"
-                    >
-                        <span className="absolute inset-0 bg-[#1b312e] translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
-                        <span className="relative z-10 group-hover:text-[#e0b265] transition-colors duration-300">Reservations</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" className="relative z-10 group-hover:translate-x-1 transition-transform duration-300">
-                            <path d="M15.3025 11.0285L2 11.0285L2 8.97146L15.3025 8.97146L11.1214 4.45436L12.4872 3L19 10L12.4872 17L11.1214 15.5456L15.3025 11.0285Z" className="fill-[#1b312e] group-hover:fill-[#e0b265] transition-colors duration-300" />
-                        </svg>
-                    </a>
+                    {/* Botones */}
+                    <div className="flex flex-wrap items-center gap-3 mt-3">
+                        <a
+                            href="/reservations"
+                            className="relative bg-[#e0b265] text-[#1b312e] px-[24px] py-[12px] h-[46px] font-normal text-[18px] lg:text-[15px] leading-[20px] flex items-center gap-2 w-fit overflow-hidden group uppercase"
+                        >
+                            <span className="absolute inset-0 bg-[#1b312e] translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
+                            <span className="relative z-10 group-hover:text-[#e0b265] transition-colors duration-300">Reservations</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" className="relative z-10 group-hover:translate-x-1 transition-transform duration-300">
+                                <path d="M15.3025 11.0285L2 11.0285L2 8.97146L15.3025 8.97146L11.1214 4.45436L12.4872 3L19 10L12.4872 17L11.1214 15.5456L15.3025 11.0285Z" className="fill-[#1b312e] group-hover:fill-[#e0b265] transition-colors duration-300" />
+                            </svg>
+                        </a>
+
+                        <a
+                            href="/order-online"
+                            className="relative border border-[#e0b265] text-[#e0b265] px-[24px] py-[12px] h-[46px] font-normal text-[18px] lg:text-[15px] leading-[20px] flex items-center gap-2 w-fit overflow-hidden group uppercase hover:bg-[#e0b265] hover:text-[#1b312e] transition-colors duration-300"
+                        >
+                            <span>Order Online</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" className="group-hover:translate-x-1 transition-transform duration-300">
+                                <path d="M15.3025 11.0285L2 11.0285L2 8.97146L15.3025 8.97146L11.1214 4.45436L12.4872 3L19 10L12.4872 17L11.1214 15.5456L15.3025 11.0285Z" className="fill-[#e0b265] group-hover:fill-[#1b312e] transition-colors duration-300" />
+                            </svg>
+                        </a>
+                    </div>
                 </div>
 
                 {/* Wrapper de columnas */}

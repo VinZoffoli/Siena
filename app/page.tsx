@@ -191,6 +191,18 @@ export default function Home() {
               </svg>
             </button>
           </form>
+
+          <Link
+            href="/order-online"
+            className="hero-fadein group mt-4 inline-flex items-center gap-2 text-white/85 text-[13px] md:text-[14px] tracking-wide hover:text-[#e0b265] transition-colors"
+          >
+            <span className="border-b border-white/40 group-hover:border-[#e0b265] transition-colors">
+              Or order online for pickup
+            </span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 20 20" fill="none" className="group-hover:translate-x-1 transition-transform duration-300">
+              <path d="M15.3025 11.0285L2 11.0285L2 8.97146L15.3025 8.97146L11.1214 4.45436L12.4872 3L19 10L12.4872 17L11.1214 15.5456L15.3025 11.0285Z" className="fill-white/85 group-hover:fill-[#e0b265] transition-colors" />
+            </svg>
+          </Link>
         </div>
 
         {/* Barra inferior — ubicación e Instagram */}
@@ -973,20 +985,35 @@ export default function Home() {
                 ))}
               </div>
 
-              <a
-                href={info.maps_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group bg-[#e0b265] text-[#1b312e] px-4 md:px-9 py-2 font-normal text-[14px] md:text-[15px] leading-[20px] md:leading-[24px] flex items-center gap-2 w-fit border border-transparent hover:bg-white hover:text-[#1b312e] hover:border-white transition mt-1 md:mt-2"
-              >
-                OPEN IN MAP
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 20 20" fill="none">
-                  <path
-                    d="M15.3025 11.0285L2 11.0285L2 8.97146L15.3025 8.97146L11.1214 4.45436L12.4872 3L19 10L12.4872 17L11.1214 15.5456L15.3025 11.0285Z"
-                    className="fill-[#1b312e] transition-colors duration-300"
-                  />
-                </svg>
-              </a>
+              <div className="flex flex-wrap items-center gap-3 mt-1 md:mt-2">
+                <a
+                  href={info.maps_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group bg-[#e0b265] text-[#1b312e] px-4 md:px-9 py-2 font-normal text-[14px] md:text-[15px] leading-[20px] md:leading-[24px] flex items-center gap-2 w-fit border border-transparent hover:bg-white hover:text-[#1b312e] hover:border-white transition"
+                >
+                  OPEN IN MAP
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 20 20" fill="none">
+                    <path
+                      d="M15.3025 11.0285L2 11.0285L2 8.97146L15.3025 8.97146L11.1214 4.45436L12.4872 3L19 10L12.4872 17L11.1214 15.5456L15.3025 11.0285Z"
+                      className="fill-[#1b312e] transition-colors duration-300"
+                    />
+                  </svg>
+                </a>
+
+                <Link
+                  href="/order-online"
+                  className="group bg-[#e0b265] text-[#1b312e] px-4 md:px-9 py-2 font-normal text-[14px] md:text-[15px] leading-[20px] md:leading-[24px] flex items-center gap-2 w-fit border border-transparent hover:bg-white hover:text-[#1b312e] hover:border-white transition"
+                >
+                  ORDER ONLINE
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 20 20" fill="none">
+                    <path
+                      d="M15.3025 11.0285L2 11.0285L2 8.97146L15.3025 8.97146L11.1214 4.45436L12.4872 3L19 10L12.4872 17L11.1214 15.5456L15.3025 11.0285Z"
+                      className="fill-[#1b312e] transition-colors duration-300"
+                    />
+                  </svg>
+                </Link>
+              </div>
             </div>
 
             {/* Mapa */}
