@@ -1,4 +1,6 @@
 "use client";
+
+import { trackConfirmedReservation } from "@/lib/reservation-analytics";
 import { Suspense, useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import Image from "next/image";
@@ -286,6 +288,7 @@ function ReservationsForm() {
       }
 
       setConfirmation(json);
+      trackConfirmedReservation();
     } catch {
       setSubmitError("Something went wrong sending your reservation. Please try again, or call us.");
     }
