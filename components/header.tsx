@@ -121,7 +121,7 @@ export default function Header() {
                     <div className="flex items-center gap-2 md:gap-2 lg:gap-4">
                         <Link href="/order-online" className="hidden lg:block">
                             <button
-                                className={`cursor-pointer px-3 py-1.5 font-normal text-[12px] leading-[18px] tracking-wide border transition bg-transparent hover:bg-[#E0B265] hover:text-[#1B312E] whitespace-nowrap ${
+                                className={`cursor-pointer px-3 py-[11px] font-normal text-[12px] leading-[18px] tracking-wide border transition bg-transparent hover:bg-[#E0B265] hover:text-[#1B312E] whitespace-nowrap ${
                                     scrolled ? "border-[#E0B265] text-[#E0B265]" : "border-white text-white"
                                 }`}
                             >
@@ -130,7 +130,7 @@ export default function Header() {
                         </Link>
 
                         <Link href="/reservations">
-                            <button className="cursor-pointer px-4 lg:px-6 py-1.5 font-normal text-[12px] lg:text-[13px] leading-[18px] tracking-wide border transition bg-[#E0B265] text-[#1B312E] border-transparent hover:bg-white hover:text-[#1B312E] hover:border-white">
+                            <button className="cursor-pointer px-4 lg:px-6 py-[11px] font-normal text-[12px] lg:text-[13px] leading-[18px] tracking-wide border transition bg-[#E0B265] text-[#1B312E] border-transparent hover:bg-white hover:text-[#1B312E] hover:border-white">
                                 RESERVATIONS
                             </button>
                         </Link>
