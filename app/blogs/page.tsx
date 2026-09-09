@@ -3,7 +3,7 @@
 import BlogCard from "@/components/BlogCard";
 import { blogs } from "@/lib/blog-data";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import BreadcrumbSchema from "@/components/BreadcrumbSchema";
 
 export default function BlogPage() {

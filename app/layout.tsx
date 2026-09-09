@@ -16,9 +16,8 @@ const TIKTOK_PIXEL_ID = "DA8D6C3C77UES9745N50";
 // (fires on window 'load') was still landing inside the measured window and
 // tanking desktop TBT. Instead we only insert the real GTM/TikTok script
 // tags on the user's first interaction, with a 5s idle fallback so page-view
-// tracking still fires for visitors who never interact. Nothing else in the
-// app pushes to dataLayer/ttq before this runs, so deferring the whole
-// bootstrap (not just the network fetch) is safe.
+// tracking still fires for visitors who never interact. loadGTM preserves any
+// confirmation events queued before the tag manager is ready.
 const deferredAnalyticsScript = `
 (function () {
   function loadGTM() {
