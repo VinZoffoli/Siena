@@ -2,18 +2,31 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 
-// Placeholder shots of the space — swap these for the client's own photos
-// whenever they're ready. Aspect ratio drives each frame's width in the
-// filmstrip (portrait shots render narrower, landscape shots wider), so it
-// keeps working correctly with any mix of orientations.
+// Real interior/exterior shots of the space (no food, no people as the main
+// subject). Every frame renders at the same fixed width (object-cover crops
+// to fit), so portrait and landscape sources look consistent side by side.
 const spaceImages = [
-  { src: "/assets/Siena_20.03.26-A-01.webp", ratio: 2048 / 1152 },
-  { src: "/assets/Siena_20.03.26-A-02.webp", ratio: 2048 / 1153 },
-  { src: "/assets/Siena_20.03.26-A-03.webp", ratio: 1152 / 2048 },
-  { src: "/assets/Siena_20.03.26-A-04.webp", ratio: 2048 / 1152 },
-  { src: "/assets/Siena_20.03.26-A-05.webp", ratio: 1152 / 2048 },
-  { src: "/assets/footer-bg-siena.webp", ratio: 9347 / 6231 },
-  { src: "/assets/Siena_20.03.26-A-06.webp", ratio: 1152 / 2048 },
+  { src: "/assets/view-our-space/exterior-daytime-1.webp" },
+  { src: "/assets/view-our-space/entrance-hostess-stand.webp" },
+  { src: "/assets/view-our-space/dining-room-wide-1.webp" },
+  { src: "/assets/view-our-space/bar-wide-1.webp" },
+  { src: "/assets/view-our-space/dining-room-neon-sign-1.webp" },
+  { src: "/assets/view-our-space/exterior-dusk-2.webp" },
+  { src: "/assets/view-our-space/dining-room-artwork.webp" },
+  { src: "/assets/view-our-space/bar-stool-detail.webp" },
+  { src: "/assets/view-our-space/dining-room-wide-2.webp" },
+  { src: "/assets/view-our-space/exterior-sign-closeup.webp" },
+  { src: "/assets/view-our-space/dining-room-wide-3.webp" },
+  { src: "/assets/view-our-space/bar-wide-2.webp" },
+  { src: "/assets/view-our-space/dining-room-neon-sign-2.webp" },
+  { src: "/assets/view-our-space/exterior-daytime-2.webp" },
+  { src: "/assets/view-our-space/dining-room-wide-4.webp" },
+  { src: "/assets/view-our-space/neon-sign-closeup.webp" },
+  { src: "/assets/view-our-space/bar-wide-3.webp" },
+  { src: "/assets/view-our-space/dining-room-daytime.webp" },
+  { src: "/assets/view-our-space/exterior-dusk-1.webp" },
+  { src: "/assets/view-our-space/exterior-aerial-dusk.webp" },
+  { src: "/assets/view-our-space/exterior-aerial-wide.webp" },
 ];
 
 const CloseIcon = () => (
@@ -125,8 +138,7 @@ export default function ViewOurSpace() {
               key={i}
               onClick={() => openAt(i)}
               aria-label="Open photo"
-              className="relative flex-shrink-0 h-[260px] md:h-[380px] lg:h-[440px] overflow-hidden group cursor-zoom-in border border-[#e0b265]/15"
-              style={{ aspectRatio: img.ratio }}
+              className="relative flex-shrink-0 w-[300px] md:w-[420px] lg:w-[480px] h-[260px] md:h-[380px] lg:h-[440px] overflow-hidden rounded-2xl group cursor-zoom-in border border-[#e0b265]/15"
             >
               <img
                 src={img.src}

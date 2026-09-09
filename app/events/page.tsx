@@ -176,6 +176,13 @@ export default function Events() {
         </div>
       </section>
 
+      {/* DIVIDER — gold strip of diamonds */}
+      <section className="relative w-full h-[28px] overflow-hidden bg-[#e0b265] flex items-center justify-center gap-8">
+        {Array.from({ length: 60 }).map((_, i) => (
+          <span key={i} className="w-[10px] h-[10px] flex-shrink-0 rotate-45 bg-[#1b312e]" />
+        ))}
+      </section>
+
       <ViewOurSpace />
 
       {/* DIVIDER */}
