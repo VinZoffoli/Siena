@@ -23,12 +23,12 @@ const steps = [
 ];
 
 const occasions = [
-  { label: "Birthdays", img: "/assets/gallery4.webp" },
-  { label: "Anniversaries", img: "/assets/gallery7.webp" },
-  { label: "Holidays", img: "/assets/gallery8.webp" },
-  { label: "Thank You Gifts", img: "/assets/gallery15.webp" },
-  { label: "Corporate Gifting", img: "/assets/gallery19.webp" },
-  { label: "Just Because", img: "/assets/gallery28.webp" },
+  { label: "Birthdays", img: "/assets/pages/GiftCards/Birthday-optimized.jpg" },
+  { label: "Anniversaries", img: "/assets/pages/GiftCards/Anniversary-optimized.jpg" },
+  { label: "Holidays", img: "/assets/pages/GiftCards/Holidays-optimized.jpg" },
+  { label: "Thank You Gifts", img: "/assets/pages/GiftCards/ThankYouGifts-optimized.jpg" },
+  { label: "Corporate Gifting", img: "/assets/pages/GiftCards/CorporateGifting-optimized.jpg" },
+  { label: "Just Because", img: "/assets/pages/GiftCards/JustBecuase-optimized.jpg" },
 ];
 
 export default function GiftCard() {
@@ -42,7 +42,7 @@ export default function GiftCard() {
           animate={{ scale: 1 }}
           transition={{ duration: 1.4, ease: "easeOut" }}
         >
-          <Image src="/assets/Siena_20.03.26-PS-05.webp" alt="Siena Gift Card" fill className="object-cover object-center" priority sizes="100vw" />
+          <Image src="/assets/pages/GiftCards/GiftCard-Hero-optimized.jpg" alt="Siena Gift Card" fill className="object-cover object-center" priority sizes="100vw" />
         </motion.div>
         <div className="absolute inset-0 bg-black/55" />
         <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-4 pt-14 md:pt-16">
@@ -163,7 +163,7 @@ export default function GiftCard() {
             >
               <div className="relative overflow-hidden group">
                 <img
-                  src="/assets/hero11.webp"
+                  src="/assets/pages/GiftCards/Unforgotable-gift-optimized.jpg"
                   alt="Siena dining experience"
                   className="w-full h-[360px] md:h-[480px] object-cover shadow-xl transition-transform duration-700 group-hover:scale-105"
                 />
@@ -313,7 +313,7 @@ export default function GiftCard() {
                   loading="lazy"
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-black/60 group-hover:bg-black/50 transition-colors duration-500" />
+                <div className="absolute inset-0 bg-black/35 group-hover:bg-black/25 transition-colors duration-500" />
                 <div className="relative z-10 flex flex-col items-center justify-center h-full text-center gap-3 px-6 py-8">
                   <span className="text-[#e0b265] text-[22px]">✦</span>
                   <h3 className="text-white text-[24px] md:text-[34px] leading-tight" style={{ fontFamily: "'Palmore-Light', serif" }}>

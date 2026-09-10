@@ -1,61 +1,507 @@
 "use client";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { motion } from "motion/react";
+import Link from "next/link";
+import { motion, AnimatePresence } from "motion/react";
+import { orderTabs as tabs, itemsByKey, keyFor, RESTAURANT_NAME, RESTAURANT_ADDRESS, type MenuItem } from "@/lib/order-menu";
+import { loadCart, saveCart } from "@/lib/cart";
+import { CartLine } from "@/components/order/CartLine";
+import {
+  PlusIcon,
+  MinusIcon,
+  BagIcon,
+  PickupIcon,
+  TruckIcon,
+  ClockIcon,
+  PinIcon,
+  CloseIcon,
+  ChevronRightIcon,
+} from "@/components/order/icons";
 
-const EVENT_INQUIRY_URL = "/event-inquiry";
+/* ─── OrderItemCard ──────────────────────────────────────── */
+function OrderItemCard({
+  item,
+  qty,
+  onAdd,
+  onRemove,
+  onOpen,
+}: {
+  item: MenuItem;
+  qty: number;
+  onAdd: () => void;
+  onRemove: () => void;
+  onOpen: () => void;
+}) {
+  const hasImage = !!item.image;
 
-const steps = [
-  {
-    num: "01",
-    title: "Browse the Menu",
-    desc: "Explore our full Mediterranean menu online: starters, mains, drinks, and more.",
-  },
-  {
-    num: "02",
-    title: "Place Your Order",
-    desc: "Choose pickup or delivery at checkout. Fast, easy, and secure through Toast.",
-  },
-  {
-    num: "03",
-    title: "Enjoy",
-    desc: "Your food arrives fresh, just like dining in. The Siena experience, at your door.",
-  },
-];
-
-const categories = [
-  {
-    image: "/assets/menu1.webp",
-    label: "Dinner",
-    sub: "Chef-crafted Mediterranean plates",
-    tab: "main-menu",
-  },
-  {
-    image: "/assets/about1.webp",
-    label: "Brunch",
-    sub: "Weekend mornings done right",
-    tab: "weekend-brunch",
-  },
-  {
-    image: "/assets/menu4.webp",
-    label: "Beverages",
-    sub: "Cocktails, wines and craft drinks",
-    tab: "libations",
-  },
-];
-
-const ArrowRight = ({ color = "white" }: { color?: string }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-    <path
-      d="M15.3025 11.0285L2 11.0285L2 8.97146L15.3025 8.97146L11.1214 4.45436L12.4872 3L19 10L12.4872 17L11.1214 15.5456L15.3025 11.0285Z"
-      fill={color}
-    />
-  </svg>
-);
-
-
-export default function OrderOnline() {
   return (
-    <main>
+    <div
+      onClick={onOpen}
+      className="flex gap-4 bg-white/8 backdrop-blur-md border border-[#e0b265]/25 hover:border-[#e0b265]/60 hover:bg-white/12 transition-colors duration-300 p-4 md:p-5 cursor-pointer"
+    >
+      <div className="flex-1 min-w-0 flex flex-col">
+        <h4
+          className="text-[16px] md:text-[18px] leading-snug uppercase text-[#e0b265]"
+          style={{ fontFamily: "'Palmore-Light', serif" }}
+        >
+          {item.name}
+        </h4>
+        {item.description && (
+          <p className="text-[13px] text-white/60 leading-[1.55] mt-1.5 line-clamp-2 whitespace-pre-line">
+            {item.description}
+          </p>
+        )}
+
+        <div className="mt-auto pt-4 flex items-center gap-4">
+          {qty > 0 ? (
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="flex items-center gap-1 bg-[#e0b265] rounded-full px-1 py-1"
+            >
+              <button
+                onClick={onRemove}
+                aria-label={`Remove one ${item.name}`}
+                className="w-6 h-6 rounded-full flex items-center justify-center text-[#1b312e] hover:bg-[#1b312e]/10 transition"
+              >
+                <MinusIcon />
+              </button>
+              <span className="w-5 text-center text-[13px] font-semibold text-[#1b312e]">{qty}</span>
+              <button
+                onClick={onAdd}
+                aria-label={`Add one more ${item.name}`}
+                className="w-6 h-6 rounded-full flex items-center justify-center text-[#1b312e] hover:bg-[#1b312e]/10 transition"
+              >
+                <PlusIcon />
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={(e) => { e.stopPropagation(); onAdd(); }}
+              aria-label={`Add ${item.name} to cart`}
+              className="w-7 h-7 flex-shrink-0 rounded-full bg-[#e0b265] text-[#1b312e] flex items-center justify-center hover:bg-white transition"
+            >
+              <PlusIcon />
+            </button>
+          )}
+          {item.price && (
+            <span className="text-[14px] font-semibold text-[#e0b265] whitespace-pre-line leading-tight">
+              {item.price}
+            </span>
+          )}
+        </div>
+      </div>
+
+      {hasImage && (
+        <div className="w-[110px] h-[110px] md:w-[135px] md:h-[135px] flex-shrink-0 overflow-hidden rounded-md">
+          <img
+            src={item.image}
+            alt={item.name}
+            loading="lazy"
+            className="w-full h-full object-cover"
+          />
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ─── ItemModal ──────────────────────────────────────────── */
+function ItemModal({
+  item,
+  initialQty,
+  onClose,
+  onConfirm,
+}: {
+  item: MenuItem;
+  initialQty: number;
+  onClose: () => void;
+  onConfirm: (qty: number) => void;
+}) {
+  const [qty, setQty] = useState(Math.max(1, initialQty));
+  const [specialRequests, setSpecialRequests] = useState("");
+  const MAX_CHARS = 500;
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [onClose]);
+
+  const unitPrice = parseFloat(item.price);
+  const hasNumericPrice = !isNaN(unitPrice);
+  const totalLabel = hasNumericPrice ? ` $${(unitPrice * qty).toFixed(2)}` : "";
+
+  return (
+    <motion.div
+      className="fixed inset-0 z-[100] bg-black/70 flex items-center justify-center p-4"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      onClick={onClose}
+    >
+      <motion.div
+        className="w-full max-w-lg max-h-[90vh] overflow-y-auto bg-[#1b312e] border border-[#e0b265]/25 shadow-2xl"
+        initial={{ opacity: 0, scale: 0.96, y: 10 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.96, y: 10 }}
+        transition={{ duration: 0.22, ease: "easeOut" }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="relative">
+          {item.image && (
+            <div className="w-full h-64 md:h-72 overflow-hidden">
+              <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+            </div>
+          )}
+          <button
+            onClick={onClose}
+            aria-label="Close"
+            className="absolute top-3 right-3 w-9 h-9 rounded-full bg-black/50 backdrop-blur-sm text-white flex items-center justify-center hover:bg-black/70 transition"
+          >
+            <CloseIcon />
+          </button>
+        </div>
+
+        <div className="p-5 md:p-6">
+          <div className="flex items-start justify-between gap-4">
+            <h3
+              className="text-[22px] md:text-[26px] leading-tight uppercase text-[#e0b265]"
+              style={{ fontFamily: "'Palmore-Light', serif" }}
+            >
+              {item.name}
+            </h3>
+            {item.price && (
+              <span className="text-[18px] font-semibold text-[#e0b265] whitespace-nowrap flex-shrink-0">
+                {hasNumericPrice ? `$${unitPrice.toFixed(2)}` : item.price}
+              </span>
+            )}
+          </div>
+
+          {item.description && (
+            <p className="text-[14px] text-white/70 leading-[1.6] mt-3 whitespace-pre-line">
+              {item.description}
+            </p>
+          )}
+
+          {item.allergens && item.allergens.length > 0 && (
+            <p className="text-[12px] text-white/45 mt-4">
+              Allergens: {item.allergens.join(", ")}
+            </p>
+          )}
+
+          <div className="mt-6">
+            <label htmlFor="special-requests" className="block text-[13px] uppercase tracking-[0.08em] text-white/70 mb-2">
+              Special Requests
+            </label>
+            <textarea
+              id="special-requests"
+              value={specialRequests}
+              onChange={(e) => setSpecialRequests(e.target.value.slice(0, MAX_CHARS))}
+              rows={3}
+              placeholder="Let us know about any preferences or allergies…"
+              className="w-full bg-white/8 border border-white/15 focus:border-[#e0b265]/60 outline-none text-white text-[14px] placeholder-white/30 p-3 resize-none transition-colors"
+            />
+            <p className="text-[11px] text-white/35 mt-1.5">
+              {specialRequests.length}/{MAX_CHARS} characters
+            </p>
+          </div>
+        </div>
+
+        <div className="border-t border-white/10 p-5 md:p-6 flex items-center gap-4">
+          <div className="flex items-center gap-1 bg-white/8 border border-white/15 rounded-full px-1 py-1 flex-shrink-0">
+            <button
+              onClick={() => setQty((q) => Math.max(1, q - 1))}
+              aria-label="Decrease quantity"
+              className="w-8 h-8 rounded-full flex items-center justify-center text-white hover:bg-white/10 transition"
+            >
+              <MinusIcon />
+            </button>
+            <span className="w-8 text-center text-[15px] font-semibold text-white">{qty}</span>
+            <button
+              onClick={() => setQty((q) => q + 1)}
+              aria-label="Increase quantity"
+              className="w-8 h-8 rounded-full flex items-center justify-center text-white hover:bg-white/10 transition"
+            >
+              <PlusIcon />
+            </button>
+          </div>
+
+          <button
+            onClick={() => onConfirm(qty)}
+            className="flex-1 flex items-center justify-center gap-2 bg-[#e0b265] text-[#1b312e] py-3 px-6 text-[13px] uppercase tracking-[0.08em] font-medium hover:bg-white transition-colors"
+          >
+            <PlusIcon />
+            Add to Order{totalLabel}
+          </button>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+/* ─── CartDrawer ─────────────────────────────────────────── */
+function CartDrawer({
+  cart,
+  onClose,
+  onAdd,
+  onRemove,
+  onDelete,
+  onEdit,
+  onAddItems,
+}: {
+  cart: Record<string, number>;
+  onClose: () => void;
+  onAdd: (key: string) => void;
+  onRemove: (key: string) => void;
+  onDelete: (key: string) => void;
+  onEdit: (key: string) => void;
+  onAddItems: () => void;
+}) {
+  const [offersOpen, setOffersOpen] = useState(false);
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [onClose]);
+
+  const entries = Object.entries(cart).filter(([, qty]) => qty > 0);
+  const subtotal = entries.reduce((sum, [key, qty]) => {
+    const item = itemsByKey[key];
+    if (!item) return sum;
+    const price = parseFloat(item.price);
+    return sum + (isNaN(price) ? 0 : price * qty);
+  }, 0);
+
+  return (
+    <motion.div
+      className="fixed inset-0 z-[100] bg-black/60"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      onClick={onClose}
+    >
+      <motion.div
+        className="absolute top-0 right-0 h-full w-full max-w-[420px] bg-[#1b312e] border-l border-[#e0b265]/25 shadow-2xl flex flex-col"
+        initial={{ x: "100%" }}
+        animate={{ x: 0 }}
+        exit={{ x: "100%" }}
+        transition={{ duration: 0.28, ease: "easeOut" }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between px-5 py-4 border-b border-white/10 flex-shrink-0">
+          <div className="flex items-center gap-2 text-white">
+            <span className="text-[#e0b265]"><BagIcon /></span>
+            <h3
+              className="text-[20px] uppercase tracking-[0.04em]"
+              style={{ fontFamily: "'Palmore-Light', serif" }}
+            >
+              My Cart
+            </h3>
+          </div>
+          <button
+            onClick={onClose}
+            aria-label="Close cart"
+            className="w-9 h-9 rounded-full flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition"
+          >
+            <CloseIcon />
+          </button>
+        </div>
+
+        {/* Items */}
+        <div className="flex-1 overflow-y-auto px-5">
+          {entries.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-full text-center py-20">
+              <span className="text-white/30 mb-3"><BagIcon /></span>
+              <p className="text-white/50 text-[14px]">Your cart is empty</p>
+            </div>
+          ) : (
+            entries.map(([key, qty]) => {
+              const item = itemsByKey[key];
+              if (!item) return null;
+              return (
+                <CartLine
+                  key={key}
+                  item={item}
+                  qty={qty}
+                  onAdd={() => onAdd(key)}
+                  onRemove={() => onRemove(key)}
+                  onEdit={() => onEdit(key)}
+                  onDelete={() => onDelete(key)}
+                />
+              );
+            })
+          )}
+        </div>
+
+        {entries.length > 0 && (
+          <div className="flex-shrink-0">
+            <div className="px-5 py-4 border-t border-white/10 flex items-center justify-between">
+              <span className="text-[15px] text-white">Subtotal</span>
+              <span className="text-[16px] font-semibold text-[#e0b265]">${subtotal.toFixed(2)}</span>
+            </div>
+
+            <button
+              onClick={() => setOffersOpen((o) => !o)}
+              className="w-full flex items-center justify-between px-5 py-3 border-t border-white/10 text-white/70 hover:text-white transition-colors"
+            >
+              <span className="text-[14px]">Offers</span>
+              <motion.span animate={{ rotate: offersOpen ? 90 : 0 }} transition={{ duration: 0.2 }}>
+                <ChevronRightIcon />
+              </motion.span>
+            </button>
+            {offersOpen && (
+              <p className="px-5 pb-3 text-[13px] text-white/40 italic">No offers available right now.</p>
+            )}
+
+            {/* Footer */}
+            <div className="px-5 py-4 border-t border-white/10 flex items-center gap-3">
+              <button
+                onClick={onAddItems}
+                className="flex-1 border border-white/25 text-white py-3 text-[13px] uppercase tracking-[0.08em] font-medium hover:border-[#e0b265]/60 hover:text-[#e0b265] transition-colors"
+              >
+                Add Items
+              </button>
+              <Link
+                href="/checkout"
+                className="flex-1 flex items-center justify-center bg-[#e0b265] text-[#1b312e] py-3 text-[13px] uppercase tracking-[0.08em] font-medium hover:bg-white transition-colors"
+              >
+                Checkout
+              </Link>
+            </div>
+          </div>
+        )}
+      </motion.div>
+    </motion.div>
+  );
+}
+
+/* ─── OrderOnline page ───────────────────────────────────── */
+export default function OrderOnline() {
+  const [activeTab, setActiveTab] = useState(0);
+  const [activeSub, setActiveSub] = useState(0);
+  const [fulfillment, setFulfillment] = useState<"pickup" | "delivery">("pickup");
+  const [cart, setCart] = useState<Record<string, number>>({});
+  const [barHeight, setBarHeight] = useState(120);
+  const barRef = useRef<HTMLDivElement>(null);
+  const [modalItem, setModalItem] = useState<{ key: string; item: MenuItem } | null>(null);
+  const [cartOpen, setCartOpen] = useState(false);
+
+  const tab = tabs[activeTab];
+
+  const subAnchor = (tabIdx: number, subIdx: number) => `oo-sub-${tabIdx}-${subIdx}`;
+
+  // Cart lives in localStorage (not a real backend) so it survives
+  // navigation over to /checkout.
+  useEffect(() => {
+    setCart(loadCart());
+  }, []);
+  useEffect(() => {
+    saveCart(cart);
+  }, [cart]);
+
+  const addItem = (key: string) => {
+    setCart((c) => ({ ...c, [key]: (c[key] ?? 0) + 1 }));
+  };
+  const removeItem = (key: string) => {
+    setCart((c) => {
+      const next = { ...c };
+      const n = (next[key] ?? 0) - 1;
+      if (n <= 0) {
+        delete next[key];
+      } else {
+        next[key] = n;
+      }
+      return next;
+    });
+  };
+  const setItemQty = (key: string, qty: number) => {
+    setCart((c) => ({ ...c, [key]: qty }));
+  };
+  const deleteItem = (key: string) => {
+    setCart((c) => {
+      const next = { ...c };
+      delete next[key];
+      return next;
+    });
+  };
+
+  const totalItems = Object.values(cart).reduce((sum, n) => sum + n, 0);
+
+  /* ── Global site header shrinks on scroll (80px → 60px); our own sticky
+     bar sits fixed underneath it, so it must track the same offset or it
+     renders hidden behind the header instead of below it. ── */
+  const [headerHeight, setHeaderHeight] = useState(80);
+  useEffect(() => {
+    const handleScroll = () => setHeaderHeight(window.scrollY > 10 ? 60 : 80);
+    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  /* ── Measure our own bar height so we can offset anchor scrolling ── */
+  useEffect(() => {
+    const measure = () => setBarHeight(barRef.current?.offsetHeight ?? 120);
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
+
+  const totalOffset = headerHeight + barHeight;
+
+  /* ── Reset scroll position + active subsection when switching top tabs ── */
+  const handleTabClick = (i: number) => {
+    setActiveTab(i);
+    setActiveSub(0);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  /* ── Highlight the sidebar entry for whichever subsection is in view ── */
+  useEffect(() => {
+    if (!tab) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const idx = tab.subsections.findIndex((_, i) => subAnchor(activeTab, i) === entry.target.id);
+            if (idx !== -1) setActiveSub(idx);
+          }
+        });
+      },
+      { rootMargin: `-${totalOffset + 20}px 0px -60% 0px`, threshold: 0 }
+    );
+    tab.subsections.forEach((_, i) => {
+      const el = document.getElementById(subAnchor(activeTab, i));
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, [tab, activeTab, totalOffset]);
+
+  const handleSidebarClick = (i: number) => {
+    const el = document.getElementById(subAnchor(activeTab, i));
+    if (el) {
+      const top = el.getBoundingClientRect().top + window.scrollY - totalOffset - 20;
+      window.scrollTo({ top, behavior: "smooth" });
+    }
+  };
+
+  return (
+    <main className="bg-[#1b312e]">
       {/* ─── HERO ─── */}
       <section className="relative w-full h-[400px] md:h-[45vh] overflow-hidden">
         <Image
@@ -130,225 +576,178 @@ export default function OrderOnline() {
         </div>
       </section>
 
-      {/* ─── ORDER CTA ─── */}
-      <section className="w-full py-[80px] overflow-hidden" style={{ backgroundColor: "#1b312e" }}>
-        <div className="w-full max-w-[1180px] mx-auto px-4 flex flex-col items-center text-center">
-          <motion.img
-            src="/assets/icono_123.svg"
-            alt=""
-            className="w-[58px] md:w-[70px] mb-5"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-          />
+      {/* ─── STICKY: CATEGORY TABS + CART ─── */}
+      <div
+        ref={barRef}
+        className="sticky z-40 bg-[#1b312e] border-b border-white/10 shadow-sm transition-[top] duration-300"
+        style={{ top: `${headerHeight}px` }}
+      >
+        <div className="max-w-[1180px] mx-auto px-4 md:px-6 py-3 flex md:grid md:grid-cols-[minmax(0,1fr)_minmax(0,auto)_minmax(0,1fr)] items-center gap-3">
+          <div className="hidden md:block" />
 
-          <div className="relative inline-block mb-16 md:mb-20">
-            <motion.h2
-              className="text-[#e0b265] text-[58px] md:text-[78px] lg:text-[92px] leading-[0.9] tracking-[0.06em] uppercase"
-              style={{ fontFamily: "'Palmore-Light', serif" }}
-              initial={{ opacity: 0, y: 60 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.7, delay: 0.15, ease: "easeOut" }}
-            >
-              Order From Home
-            </motion.h2>
-            <motion.span
-              className="pointer-events-none absolute left-1/2 top-full -translate-x-1/2 -translate-y-[20%] md:-translate-y-[35%] text-[#e0b265] text-[28px] md:text-[58px] lg:text-[82px] leading-none whitespace-nowrap"
-              style={{
-                fontFamily: "'AguafinaScript-Regular', cursive",
-                textShadow:
-                  "2px 2px 0 #1b312e,-2px -2px 0 #1b312e,2px -2px 0 #1b312e,-2px 2px 0 #1b312e",
-              }}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.7, delay: 0.35, ease: "easeOut" }}
-            >
-              taste siena anywhere
-            </motion.span>
+          <div className="flex-1 md:flex-none md:justify-self-center overflow-x-auto scrollbar-hide max-w-full">
+            <div className="flex items-center gap-2 md:gap-3 whitespace-nowrap">
+              {tabs.map((t, i) => {
+                const isActive = activeTab === i;
+                return (
+                  <button
+                    key={t.id}
+                    onClick={() => handleTabClick(i)}
+                    className={`px-4 md:px-5 py-[7px] text-[11px] md:text-[12px] tracking-[0.14em] uppercase cursor-pointer transition-all duration-200 border font-medium ${
+                      isActive
+                        ? "bg-[#e0b265] text-[#1b312e] border-[#e0b265]"
+                        : "bg-transparent text-white/55 border-white/20 hover:border-[#e0b265]/50 hover:text-[#e0b265]"
+                    }`}
+                  >
+                    {t.label}
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
-          <motion.p
-            className="text-white/70 text-[15px] md:text-[17px] leading-[1.8] max-w-[600px] mb-10"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.7, delay: 0.45, ease: "easeOut" }}
+          {/* Cart — styled to match the site's own button language */}
+          <button
+            onClick={() => setCartOpen(true)}
+            className="group flex-shrink-0 justify-self-end flex items-center gap-2 border border-[#e0b265] text-[#e0b265] px-4 py-2 text-[11px] uppercase tracking-[0.12em] font-medium hover:bg-[#e0b265] hover:text-[#1b312e] transition-colors duration-200"
           >
-            Our full menu is available for pickup and delivery through Toast. From our wood-fired
-            Mediterranean plates to our house cocktails, the Siena experience delivered to your door.
-          </motion.p>
-
-          <motion.a
-            href={EVENT_INQUIRY_URL}
-            className="group bg-[#e0b265] text-[#1b312e] px-10 py-4 text-[15px] font-normal flex items-center gap-3 hover:bg-white hover:text-[#1b312e] transition"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.6, delay: 0.55, ease: "easeOut" }}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            ORDER NOW
-            <ArrowRight color="#1b312e" />
-          </motion.a>
+            <BagIcon />
+            Cart
+            <span className="min-w-[18px] h-[18px] px-1 flex items-center justify-center bg-[#1b312e] text-[#e0b265] group-hover:bg-white group-hover:text-[#1b312e] text-[11px] font-semibold transition-colors duration-200">
+              {totalItems}
+            </span>
+          </button>
         </div>
-      </section>
+      </div>
 
-      {/* ─── HOW IT WORKS ─── */}
-      <section className="w-full py-[80px] overflow-hidden" style={{ backgroundColor: "#030302" }}>
-        <div className="w-full max-w-[1180px] mx-auto px-4">
-          <div className="flex flex-col items-center text-center mb-14">
-            <motion.img
+      {/* ─── MENU BROWSER ─── */}
+      <section className="w-full pb-[90px]">
+        <div className="max-w-[1180px] mx-auto px-4 md:px-6 pt-8">
+          <div className="flex flex-col items-center text-center mb-10 md:mb-12">
+            <img
               src="/assets/icono_123.svg"
               alt=""
-              className="w-[58px] md:w-[70px] mb-5"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
+              aria-hidden="true"
+              className="w-[55px] md:w-[65px] opacity-70 mb-3"
             />
-
-            <div className="relative inline-block">
-              <motion.h2
-                className="text-[#e0b265] text-[58px] md:text-[78px] lg:text-[92px] leading-[0.9] tracking-[0.06em] uppercase"
-                style={{ fontFamily: "'Palmore-Light', serif" }}
-                initial={{ opacity: 0, y: 60 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.7, delay: 0.15, ease: "easeOut" }}
-              >
-                How It Works
-              </motion.h2>
-              <motion.span
-                className="pointer-events-none absolute left-1/2 top-full -translate-x-1/2 -translate-y-[20%] md:-translate-y-[35%] text-[#e0b265] text-[28px] md:text-[58px] lg:text-[82px] leading-none whitespace-nowrap"
-                style={{ fontFamily: "'AguafinaScript-Regular', cursive" }}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.7, delay: 0.35, ease: "easeOut" }}
-              >
-                simple as that
-              </motion.span>
-            </div>
+            <h2
+              className="text-[#e0b265] text-[38px] md:text-[52px] leading-[0.95] tracking-[0.06em] uppercase"
+              style={{ fontFamily: "'Palmore-Light', serif" }}
+            >
+              Build Your Order
+            </h2>
+            <p className="text-white/60 text-[14px] md:text-[15px] mt-3 max-w-[520px]">
+              Browse our full menu, add your favorites, and place your order for pickup.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-0 mt-16 md:mt-20">
-            {steps.map((step, i) => (
-              <motion.div
-                key={i}
-                className="flex flex-col items-center md:items-start text-center md:text-left p-6 md:p-8 border-t border-[#e0b265]/20 md:border-t-0 md:border-l first:border-t-0 first:border-l-0"
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.7, delay: i * 0.12, ease: "easeOut" }}
+          <div className="flex flex-col md:flex-row gap-6 md:gap-10">
+            {/* SIDEBAR — jump links to each subsection of the active tab */}
+            <div className="md:w-[210px] flex-shrink-0">
+              <div
+                className="flex flex-col gap-5 md:sticky"
+                style={{ top: `${totalOffset + 20}px` }}
               >
-                <span
-                  className="text-[#e0b265] text-[52px] md:text-[68px] leading-none mb-3"
-                  style={{ fontFamily: "'Palmore-Light', serif" }}
-                >
-                  {step.num}
-                </span>
-                <div className="w-8 h-[2px] bg-[#e0b265] mb-4" />
-                <h3
-                  className="text-[#e0b265] text-[26px] md:text-[30px] leading-tight mb-3"
-                  style={{ fontFamily: "'Palmore-Light', serif" }}
-                >
-                  {step.title}
-                </h3>
-                <p className="text-white/65 text-[15px] md:text-[16px] leading-[1.7]">
-                  {step.desc}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ─── CATEGORY HIGHLIGHTS ─── */}
-      <section className="w-full py-[80px] overflow-hidden" style={{ backgroundColor: "#1b312e" }}>
-        <div className="w-full max-w-[1180px] mx-auto px-4">
-          <div className="flex flex-col items-center text-center mb-16 md:mb-20">
-            <div className="relative inline-block">
-              <motion.h2
-                className="text-[#e0b265] text-[58px] md:text-[78px] lg:text-[92px] leading-[0.9] tracking-[0.06em] uppercase"
-                style={{ fontFamily: "'Palmore-Light', serif" }}
-                initial={{ opacity: 0, y: 60 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.7, delay: 0.15, ease: "easeOut" }}
-              >
-                What We&apos;re Known For
-              </motion.h2>
-              <motion.span
-                className="pointer-events-none absolute left-1/2 top-full -translate-x-1/2 -translate-y-[20%] md:-translate-y-[35%] text-[#e0b265] text-[28px] md:text-[58px] lg:text-[82px] leading-none whitespace-nowrap"
-                style={{
-                  fontFamily: "'AguafinaScript-Regular', cursive",
-                  textShadow:
-                    "2px 2px 0 #1b312e,-2px -2px 0 #1b312e,2px -2px 0 #1b312e,-2px 2px 0 #1b312e",
-                }}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.7, delay: 0.35, ease: "easeOut" }}
-              >
-                crowd favorites
-              </motion.span>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-            {categories.map((cat, i) => (
-              <motion.a
-                key={i}
-                href={`/menu?tab=${cat.tab}`}
-                className="group relative block overflow-hidden cursor-pointer"
-                initial={{ opacity: 0, x: i % 2 === 0 ? -40 : 40 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.7, delay: i * 0.12, ease: "easeOut" }}
-                whileHover={{ y: -4, transition: { duration: 0.2 } }}
-              >
-                <div className="overflow-hidden">
-                  <img
-                    src={cat.image}
-                    alt={cat.label}
-                    className="w-full h-[280px] md:h-[360px] object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                </div>
-                {/* Default overlay */}
-                <div className="absolute inset-0 bg-black/25 transition-opacity duration-300 group-hover:opacity-0" />
-                {/* Hover overlay */}
-                <div className="absolute inset-0 bg-[#1b312e]/80 opacity-0 transition-opacity duration-300 group-hover:opacity-100 flex items-end p-5">
-                  <div className="flex items-end justify-between gap-3 w-full">
-                    <div className="min-w-0 flex-1">
-                      <h3
-                        className="text-white text-[26px] md:text-[30px] leading-tight uppercase tracking-[0.06em]"
-                        style={{ fontFamily: "'Palmore-Light', serif" }}
+                <div className="flex md:flex-col gap-2 overflow-x-auto md:overflow-visible scrollbar-hide pb-2 md:pb-0">
+                  {tab?.subsections.map((s, i) => {
+                    const isActive = activeSub === i;
+                    return (
+                      <button
+                        key={i}
+                        onClick={() => handleSidebarClick(i)}
+                        className={`px-4 py-2 text-[12px] md:text-[13px] tracking-[0.06em] uppercase whitespace-nowrap md:whitespace-normal text-left rounded-full border transition-all duration-200 flex-shrink-0 ${
+                          isActive
+                            ? "bg-[#e0b265] text-[#1b312e] border-[#e0b265] font-medium"
+                            : "bg-transparent text-white/60 border-white/20 hover:border-[#e0b265]/50 hover:text-[#e0b265]"
+                        }`}
                       >
-                        {cat.label}
-                      </h3>
-                      <p className="text-white/80 text-[13px] md:text-[15px] mt-1">{cat.sub}</p>
-                    </div>
-                    <div className="w-9 h-9 border border-white/60 flex items-center justify-center flex-shrink-0">
-                      <ArrowRight />
-                    </div>
+                        {s.title}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Fulfillment info — pickup/delivery, ASAP, location */}
+                <div className="border-t border-white/10 pt-5 flex flex-col gap-3">
+                  <div className="inline-flex items-center border border-white/15 rounded-md overflow-hidden self-start">
+                    <button
+                      onClick={() => setFulfillment("pickup")}
+                      className={`flex items-center gap-1.5 px-3 py-2 text-[11px] uppercase tracking-[0.08em] font-medium transition-colors duration-200 ${
+                        fulfillment === "pickup"
+                          ? "bg-[#e0b265] text-[#1b312e]"
+                          : "bg-transparent text-white/60 hover:text-[#e0b265]"
+                      }`}
+                    >
+                      <PickupIcon />
+                      Pickup
+                    </button>
+                    <div className="w-px self-stretch bg-white/15" />
+                    <button
+                      disabled
+                      title="Delivery is not available yet"
+                      className="flex items-center gap-1.5 px-3 py-2 text-[11px] uppercase tracking-[0.08em] text-white/25 cursor-not-allowed"
+                    >
+                      <TruckIcon />
+                      Delivery
+                    </button>
+                  </div>
+
+                  <div className="flex items-start gap-2 text-[12px] text-white/70">
+                    <span className="text-[#e0b265] flex-shrink-0 mt-0.5"><ClockIcon /></span>
+                    <span>
+                      Pickup <span className="text-white font-medium">ASAP</span>
+                    </span>
+                  </div>
+
+                  <div className="flex items-start gap-2 text-[12px] text-white/70">
+                    <span className="text-[#e0b265] flex-shrink-0 mt-0.5"><PinIcon /></span>
+                    <span>
+                      <span className="text-white font-medium">{RESTAURANT_NAME}</span>
+                      {RESTAURANT_ADDRESS && <span className="block text-white/45 mt-0.5">{RESTAURANT_ADDRESS}</span>}
+                    </span>
                   </div>
                 </div>
-                {/* Always-visible label at bottom */}
-                <div className="absolute bottom-0 left-0 right-0 p-5 group-hover:opacity-0 transition-opacity duration-300">
-                  <h3
-                    className="text-white text-[24px] md:text-[28px] leading-tight uppercase tracking-[0.06em] drop-shadow-lg"
-                    style={{ fontFamily: "'Palmore-Light', serif" }}
-                  >
-                    {cat.label}
-                  </h3>
-                  <p className="text-white/75 text-[13px] md:text-[14px] mt-0.5 drop-shadow-lg">{cat.sub}</p>
+              </div>
+            </div>
+
+            {/* FULL MENU — every subsection of the active tab, stacked */}
+            <div className="flex-1 min-w-0 flex flex-col gap-14">
+              {tab?.subsections.map((s, i) => (
+                <div key={i} id={subAnchor(activeTab, i)} className="scroll-mt-[140px]">
+                  <div className="mb-6">
+                    <h3
+                      className="text-[#e0b265] text-[22px] md:text-[26px] uppercase tracking-[0.04em]"
+                      style={{ fontFamily: "'Palmore-Light', serif" }}
+                    >
+                      {s.title}
+                    </h3>
+                    {s.subtitle && (
+                      <p className="text-white/50 text-[12px] uppercase tracking-widest mt-1">{s.subtitle}</p>
+                    )}
+                  </div>
+
+                  {s.items.length > 0 ? (
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-5">
+                      {s.items.map((item, j) => {
+                        const key = keyFor(activeTab, i, j);
+                        return (
+                          <OrderItemCard
+                            key={key}
+                            item={item}
+                            qty={cart[key] ?? 0}
+                            onAdd={() => addItem(key)}
+                            onRemove={() => removeItem(key)}
+                            onOpen={() => setModalItem({ key, item })}
+                          />
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <div className="text-white/40 italic py-6 text-sm">Coming soon…</div>
+                  )}
                 </div>
-              </motion.a>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -362,7 +761,41 @@ export default function OrderOnline() {
         />
       </section>
 
-     
+      {/* ─── ITEM DETAIL MODAL ─── */}
+      <AnimatePresence>
+        {modalItem && (
+          <ItemModal
+            item={modalItem.item}
+            initialQty={cart[modalItem.key] ?? 1}
+            onClose={() => setModalItem(null)}
+            onConfirm={(qty) => {
+              setItemQty(modalItem.key, qty);
+              setModalItem(null);
+            }}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* ─── CART DRAWER ─── */}
+      <AnimatePresence>
+        {cartOpen && (
+          <CartDrawer
+            cart={cart}
+            onClose={() => setCartOpen(false)}
+            onAdd={addItem}
+            onRemove={removeItem}
+            onDelete={deleteItem}
+            onEdit={(key) => {
+              const item = itemsByKey[key];
+              if (item) {
+                setCartOpen(false);
+                setModalItem({ key, item });
+              }
+            }}
+            onAddItems={() => setCartOpen(false)}
+          />
+        )}
+      </AnimatePresence>
     </main>
   );
 }

@@ -3,6 +3,7 @@ import Image from "next/image";
 import { motion } from "motion/react";
 import EventsSlider from "@/components/EventsSlider";
 import TestimonialsSlider from "@/components/TestimonialsSlider";
+import ViewOurSpace from "@/components/ViewOurSpace";
 
 const steps = [
   {
@@ -42,7 +43,7 @@ export default function Events() {
           animate={{ scale: 1 }}
           transition={{ duration: 1.4, ease: "easeOut" }}
         >
-          <Image src="/assets/hero5.webp" alt="Events at Siena" fill className="object-cover object-[50%_40%]" priority sizes="100vw" />
+          <Image src="/assets/pages/Events/Events-Hero-optimized.jpg" alt="Events at Siena" fill className="object-cover object-[50%_40%]" priority sizes="100vw" />
         </motion.div>
         <div className="absolute inset-0 bg-black/55" />
         <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-4 pt-14 md:pt-16">
@@ -175,6 +176,15 @@ export default function Events() {
         </div>
       </section>
 
+      {/* DIVIDER — gold strip of diamonds */}
+      <section className="relative w-full h-[28px] overflow-hidden bg-[#e0b265] flex items-center justify-center gap-8">
+        {Array.from({ length: 60 }).map((_, i) => (
+          <span key={i} className="w-[10px] h-[10px] flex-shrink-0 rotate-45 bg-[#1b312e]" />
+        ))}
+      </section>
+
+      <ViewOurSpace />
+
       {/* DIVIDER */}
       <section className="relative w-full h-[58px]">
         <img src="/assets/divisor_negro.svg" alt="" className="absolute inset-0 w-full h-full object-cover" />
@@ -273,7 +283,7 @@ export default function Events() {
             >
               <div className="relative overflow-hidden">
                 <img
-                  src="/assets/hero6.webp"
+                  src="/assets/pages/Events/what-we-offer-optimized.jpg"
                   alt="Siena event space"
                   className="w-full h-[300px] md:h-[480px] object-cover"
                   loading="lazy"

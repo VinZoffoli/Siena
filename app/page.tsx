@@ -18,13 +18,17 @@ import {
   type WeekdaySchedule,
 } from "@/lib/hours";
 import { ReservationDatePicker } from "@/components/ReservationDatePicker";
+import { ORDER_ONLINE_URL } from "@/lib/order-menu";
 import LazyVideo from "@/components/LazyVideo";
 import { preload } from "react-dom";
 
 const PARTY_SIZES = Array.from({ length: 14 }, (_, i) => i + 1);
 
 const EventsSlider = dynamic(() => import("@/components/EventsSlider"), { ssr: false });
-const TestimonialsSlider = dynamic(() => import("@/components/TestimonialsSlider"), { ssr: false });
+// SSR enabled (unlike the other two below) so the 9 real Google reviews it
+// renders exist in server HTML for crawlers, instead of only appearing after
+// client JS mounts.
+const TestimonialsSlider = dynamic(() => import("@/components/TestimonialsSlider"));
 const VideosSection = dynamic(() => import("@/components/VideosSection"), { ssr: false });
 
 const slides = [
@@ -93,8 +97,8 @@ export default function Home() {
             used to be a separate <Image> and the video, and it is what LCP
             measures. See eagerPoster in LazyVideo for why that matters. */}
         <LazyVideo
-          src="/assets/hero_video.mp4"
-          mobileSrc="/assets/hero_video_mobile.mp4"
+          src="/assets/hero_video_v2.mp4"
+          mobileSrc="/assets/hero_video_mobile_v2.mp4"
           poster="/assets/hero_poster.webp"
           eagerPoster
           className="absolute inset-0 w-full h-full object-cover"
@@ -188,13 +192,27 @@ export default function Home() {
               </svg>
             </button>
           </form>
+
+          <Link
+            href={ORDER_ONLINE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hero-fadein group mt-4 inline-flex items-center gap-2 text-white/85 text-[13px] md:text-[14px] tracking-wide hover:text-[#e0b265] transition-colors"
+          >
+            <span className="border-b border-white/40 group-hover:border-[#e0b265] transition-colors">
+              Or order online for pickup
+            </span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 20 20" fill="none" className="group-hover:translate-x-1 transition-transform duration-300">
+              <path d="M15.3025 11.0285L2 11.0285L2 8.97146L15.3025 8.97146L11.1214 4.45436L12.4872 3L19 10L12.4872 17L11.1214 15.5456L15.3025 11.0285Z" className="fill-white/85 group-hover:fill-[#e0b265] transition-colors" />
+            </svg>
+          </Link>
         </div>
 
         {/* Barra inferior — ubicación e Instagram */}
         <div className="w-full max-w-[1180px] absolute bottom-0 left-1/2 -translate-x-1/2 z-10 py-4 hidden md:flex items-center justify-between">
           {/* Ubicación */}
           <a
-            href="https://maps.app.goo.gl/qAEv8rdegv8rYr1c8"
+            href={info.maps_url}
             target="_blank"
             rel="noopener noreferrer"
             className="group flex items-center gap-2 text-white/80 text-[14px] md:text-[16px] tracking-wide hover:text-[#E0B265] transition text-center"
@@ -487,7 +505,7 @@ export default function Home() {
               transition={{ duration: 0.38, delay: 0, ease: "easeOut" }}
               whileHover={{ y: -6, transition: { duration: 0.22 } }}
             >
-              <Image src="/assets/menu1.webp" alt="Dinner" fill quality={65} sizes="(max-width: 767px) 100vw, 390px" loading="lazy" className="object-cover transition-transform duration-500 group-hover:scale-110" />
+              <Image src="/assets/pages/Home/ETF-Dinner.jpg" alt="Dinner" fill quality={65} sizes="(max-width: 767px) 100vw, 390px" loading="lazy" className="object-cover transition-transform duration-500 group-hover:scale-110" />
               <div className="absolute inset-0 bg-black/50 group-hover:bg-black/30 transition-colors duration-500" />
 
               <div className="absolute inset-4 border border-[#e0b265]">
@@ -519,7 +537,7 @@ export default function Home() {
               transition={{ duration: 0.38, delay: 0.08, ease: "easeOut" }}
               whileHover={{ y: -6, transition: { duration: 0.22 } }}
             >
-              <Image src="/assets/about1.webp" alt="Brunch" fill quality={65} sizes="(max-width: 767px) 100vw, 390px" loading="lazy" className="object-cover transition-transform duration-500 group-hover:scale-110" />
+              <Image src="/assets/pages/Home/ETF-Brunch.jpg" alt="Brunch" fill quality={65} sizes="(max-width: 767px) 100vw, 390px" loading="lazy" className="object-cover transition-transform duration-500 group-hover:scale-110" />
               <div className="absolute inset-0 bg-black/50 group-hover:bg-black/30 transition-colors duration-500" />
 
               <div className="absolute inset-4 border border-[#e0b265]">
@@ -549,7 +567,7 @@ export default function Home() {
               transition={{ duration: 0.38, delay: 0.12, ease: "easeOut" }}
               whileHover={{ y: -6, transition: { duration: 0.22 } }}
             >
-              <Image src="/assets/about3.webp" alt="Happy Hour" fill sizes="(max-width: 767px) 100vw, 390px" loading="lazy" className="object-cover transition-transform duration-500 group-hover:scale-110" />
+              <Image src="/assets/pages/Home/ETF-HappyHour.jpg" alt="Happy Hour" fill sizes="(max-width: 767px) 100vw, 390px" loading="lazy" className="object-cover transition-transform duration-500 group-hover:scale-110" />
               <div className="absolute inset-0 bg-black/50 group-hover:bg-black/30 transition-colors duration-500" />
 
               <div className="absolute inset-4 border border-[#e0b265]">
@@ -579,7 +597,7 @@ export default function Home() {
               transition={{ duration: 0.38, delay: 0.18, ease: "easeOut" }}
               whileHover={{ y: -6, transition: { duration: 0.22 } }}
             >
-              <Image src="/assets/menu4.webp" alt="Beverages" fill sizes="(max-width: 767px) 100vw, 66vw" loading="lazy" className="object-cover transition-transform duration-500 group-hover:scale-110" />
+              <Image src="/assets/pages/Home/ETF-Beverages-2-landscape.jpg" alt="Beverages" fill sizes="(max-width: 767px) 100vw, 66vw" loading="lazy" className="object-cover transition-transform duration-500 group-hover:scale-110" />
               <div className="absolute inset-0 bg-black/50 group-hover:bg-black/30 transition-colors duration-500" />
 
               <div className="absolute inset-4 border border-[#e0b265]">
@@ -970,20 +988,37 @@ export default function Home() {
                 ))}
               </div>
 
-              <a
-                href={info.maps_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group bg-[#e0b265] text-[#1b312e] px-4 md:px-9 py-2 font-normal text-[14px] md:text-[15px] leading-[20px] md:leading-[24px] flex items-center gap-2 w-fit border border-transparent hover:bg-white hover:text-[#1b312e] hover:border-white transition mt-1 md:mt-2"
-              >
-                OPEN IN MAP
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 20 20" fill="none">
-                  <path
-                    d="M15.3025 11.0285L2 11.0285L2 8.97146L15.3025 8.97146L11.1214 4.45436L12.4872 3L19 10L12.4872 17L11.1214 15.5456L15.3025 11.0285Z"
-                    className="fill-[#1b312e] transition-colors duration-300"
-                  />
-                </svg>
-              </a>
+              <div className="flex flex-wrap items-center gap-3 mt-1 md:mt-2">
+                <a
+                  href={info.maps_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group bg-[#e0b265] text-[#1b312e] px-4 md:px-9 py-2 font-normal text-[14px] md:text-[15px] leading-[20px] md:leading-[24px] flex items-center gap-2 w-fit border border-transparent hover:bg-white hover:text-[#1b312e] hover:border-white transition"
+                >
+                  OPEN IN MAP
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 20 20" fill="none">
+                    <path
+                      d="M15.3025 11.0285L2 11.0285L2 8.97146L15.3025 8.97146L11.1214 4.45436L12.4872 3L19 10L12.4872 17L11.1214 15.5456L15.3025 11.0285Z"
+                      className="fill-[#1b312e] transition-colors duration-300"
+                    />
+                  </svg>
+                </a>
+
+                <Link
+                  href={ORDER_ONLINE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group bg-[#e0b265] text-[#1b312e] px-4 md:px-9 py-2 font-normal text-[14px] md:text-[15px] leading-[20px] md:leading-[24px] flex items-center gap-2 w-fit border border-transparent hover:bg-white hover:text-[#1b312e] hover:border-white transition"
+                >
+                  ORDER ONLINE
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 20 20" fill="none">
+                    <path
+                      d="M15.3025 11.0285L2 11.0285L2 8.97146L15.3025 8.97146L11.1214 4.45436L12.4872 3L19 10L12.4872 17L11.1214 15.5456L15.3025 11.0285Z"
+                      className="fill-[#1b312e] transition-colors duration-300"
+                    />
+                  </svg>
+                </Link>
+              </div>
             </div>
 
             {/* Mapa */}

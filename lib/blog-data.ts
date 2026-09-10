@@ -1,6 +1,13 @@
 export interface Blog {
   slug: string;
 
+  // False for posts that have been content-consolidated into an evergreen
+  // landing page and now 308-redirect at the edge (outside this repo) —
+  // kept here for history, but excluded from the sitemap and /blogs listing
+  // so we stop pointing crawlers and visitors at a redirect. Defaults to
+  // true when omitted.
+  live?: boolean;
+
   // Blog Content
   title: string;
   description: string;
@@ -23,6 +30,7 @@ export interface Blog {
 export const blogs: Blog[] = [
   {
     slug: "italian-restaurant-alpharetta",
+    live: false, // 308s to /italian-restaurant-alpharetta
 
     // Blog Page
     title:
@@ -244,6 +252,7 @@ export const blogs: Blog[] = [
 
 {
     slug: "best-italian-restaurants-in-alpharetta",
+    live: false, // 308s to /italian-restaurant-alpharetta
 
     // Blog Page
     title: "Best Italian Restaurants in Alpharetta for Romantic Dinner Nights",
@@ -346,6 +355,7 @@ export const blogs: Blog[] = [
 
 {
     slug: "mediterranean-italian-restaurant",
+    live: false, // 308s to /mediterranean-restaurant-alpharetta
 
     // Blog Page
     title: "Mediterranean Italian Restaurant Experience a New Dining Trend in Alpharetta",
@@ -446,6 +456,7 @@ export const blogs: Blog[] = [
 
 {
     slug: "best-restaurants-alpharetta-ga-locals",
+    live: false, // 308s to /best-restaurants-alpharetta
 
     // Blog Page
     title: "Best Restaurants Alpharetta GA Locals Recommend For Weekend Dining",
@@ -573,6 +584,7 @@ export const blogs: Blog[] = [
 
   {
     slug: "healthy-and-flavorful-mediterranean",
+    live: false, // 308s to /mediterranean-restaurant-alpharetta
 
     // Blog Page
     title: "Healthy & Flavorful Mediterranean Food Alpharetta Residents Are Loving",
@@ -755,6 +767,7 @@ export const blogs: Blog[] = [
 
   {
     slug: "from-pasta-to-seafood",
+    live: false, // 308s to /menus
 
     // Blog Page
     title: "From Pasta to Seafood: What Makes an Italian Restaurant in Alpharetta Stand Out",
@@ -868,6 +881,7 @@ export const blogs: Blog[] = [
 
   {
     slug: "mediterranean-cuisine-in-alpharetta",
+    live: false, // 308s to /mediterranean-restaurant-alpharetta
 
     // Blog Page
     title: "Why Mediterranean Cuisine in Alpharetta Is Growing Popular",
@@ -957,6 +971,7 @@ export const blogs: Blog[] = [
 
   {
     slug: "from-business-dinners-to-date-nights",
+    live: false, // 308s to /date-night-alpharetta
 
     // Blog Page
     title: "From Business Dinners to Date Nights: Why Fine Dining Restaurant in Alpharetta Never Disappoints",
@@ -1068,6 +1083,7 @@ export const blogs: Blog[] = [
 
   {
     slug: "rise-of-mediterranean-italian-restaurants",
+    live: false, // 308s to /mediterranean-restaurant-alpharetta
 
     // Blog Page
     title: "The Rise of Mediterranean Italian Restaurants in Alpharetta: A Perfect Blend of Flavor and Tradition",

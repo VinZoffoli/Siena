@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
+import { ORDER_ONLINE_URL } from "@/lib/order-menu";
 
 export default function Header() {
     const pathname = usePathname();
@@ -30,6 +31,7 @@ export default function Header() {
     const mobileLinks = [
         { href: "/", label: "Home" },
         { href: "/menus", label: "Menu" },
+        { href: ORDER_ONLINE_URL, label: "Order Online" },
         { href: "/events", label: "Events" },
         { href: "/live-music-fridays", label: "Live Music Fridays" },
         { href: "/reservations", label: "Reservations" },
@@ -65,7 +67,7 @@ export default function Header() {
                     </Link>
 
                     {/* Nav Desktop */}
-                    <nav className="hidden md:flex items-center gap-4 text-[15px] font-normal uppercase tracking-wide absolute left-1/2 -translate-x-1/2">
+                    <nav className="hidden md:flex items-center gap-0 lg:gap-1 text-[15px] font-normal uppercase tracking-wide absolute left-1/2 -translate-x-1/2">
                         <Link href="/" className={`px-3 flex justify-center relative text-white ${scrolled && pathname === "/" ? "text-[#E0B265] after:w-full" : ""
                             } after:absolute after:left-0 after:-bottom-3 after:h-[2px] after:bg-current after:w-0 after:transition-all after:duration-300 hover:after:w-full`}>
                             Home
@@ -117,9 +119,15 @@ export default function Header() {
                     </nav>
 
                     {/* Right side */}
-                    <div className="flex items-center gap-2 md:gap-4">
+                    <div className="flex items-center gap-2 md:gap-2 lg:gap-4">
+                        <Link href={ORDER_ONLINE_URL} target="_blank" rel="noopener noreferrer" className="hidden lg:block">
+                            <button className="cursor-pointer px-3 py-[11px] font-normal text-[12px] leading-[18px] tracking-wide border border-[#E0B265] bg-[#1B312E]/50 backdrop-blur-sm text-[#E0B265] transition hover:bg-[#E0B265] hover:text-[#1B312E] whitespace-nowrap">
+                                ORDER ONLINE
+                            </button>
+                        </Link>
+
                         <Link href="/reservations">
-                            <button className="cursor-pointer px-4 md:px-9 py-2 font-normal text-[14px] md:text-[15px] leading-[20px] md:leading-[24px] tracking-wide border transition bg-[#E0B265] text-[#1B312E] border-transparent hover:bg-white hover:text-[#1B312E] hover:border-white">
+                            <button className="cursor-pointer px-4 lg:px-6 py-[11px] font-normal text-[12px] lg:text-[13px] leading-[18px] tracking-wide border transition bg-[#E0B265] text-[#1B312E] border-transparent hover:bg-white hover:text-[#1B312E] hover:border-white">
                                 RESERVATIONS
                             </button>
                         </Link>
@@ -214,11 +222,14 @@ export default function Header() {
                 <nav className="flex flex-col p-4 gap-1">
                     {mobileLinks.map((link) => {
                         const isActive = pathname === link.href;
+                        const isExternal = link.href.startsWith("http");
                         return (
                             <Link
                                 key={link.href}
                                 href={link.href}
                                 onClick={() => setMenuOpen(false)}
+                                target={isExternal ? "_blank" : undefined}
+                                rel={isExternal ? "noopener noreferrer" : undefined}
                                 className={`flex items-center justify-center px-4 py-4 text-[15px] font-semibold uppercase tracking-wide transition-colors duration-200 ${isActive
                                     ? "bg-[#E0B265]/15 text-[#E0B265]"
                                     : "text-white hover:bg-[#E0B265]/15 hover:text-[#E0B265]"
