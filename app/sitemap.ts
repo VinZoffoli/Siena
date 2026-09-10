@@ -5,7 +5,7 @@ const SITE_URL = "https://sienaatl.com";
 
 // Every indexable page. /event-inquiry/thank-you is deliberately absent, since it is
 // marked noindex and a post-submission page has no business in search results.
-const PAGES: { path: string; priority: number }[] = [
+const PAGES: { path: string; priority: number; lastModified?: string }[] = [
   { path: "", priority: 1.0 },
   { path: "/mediterranean-restaurant-alpharetta", priority: 0.95 },
   { path: "/menus", priority: 0.9 },
@@ -34,7 +34,7 @@ const PAGES: { path: string; priority: number }[] = [
   { path: "/private-dining-alpharetta", priority: 0.85 },
   { path: "/alpharetta-restaurant-week", priority: 0.85 },
   { path: "/date-night-alpharetta", priority: 0.8 },
-  { path: "/birthday-dinner-alpharetta", priority: 0.8 },
+  { path: "/birthday-dinner-alpharetta", priority: 0.8, lastModified: "2026-09-09" },
   { path: "/brunch-alpharetta", priority: 0.8 },
   { path: "/happy-hour-alpharetta", priority: 0.8 },
   { path: "/mediterranean-restaurant-near-roswell-ga", priority: 0.8 },
@@ -51,7 +51,7 @@ const PAGES: { path: string; priority: number }[] = [
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const pages = PAGES.map(({ path, priority }) => ({ url: `${SITE_URL}${path}`, priority }));
+  const pages = PAGES.map(({ path, priority, lastModified }) => ({ url: `${SITE_URL}${path}`, priority, ...(lastModified ? { lastModified } : {}) }));
   const posts = blogs.filter((blog) => blog.live !== false).map((blog) => ({
     url: `${SITE_URL}/blogs/${blog.slug}`,
     lastModified: new Date(blog.updatedAt || blog.publishedAt),

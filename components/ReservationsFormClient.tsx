@@ -17,6 +17,7 @@ import {
   type WeekdaySchedule,
 } from "@/lib/hours";
 import { ReservationDatePicker } from "@/components/ReservationDatePicker";
+import { trackConfirmedReservation } from "@/lib/reservation-analytics";
 
 const BOOKING_API = "https://reservations.sienaatl.com/api/book";
 
@@ -278,6 +279,7 @@ export default function ReservationsFormClient({
       }
 
       setConfirmation(json);
+      trackConfirmedReservation();
     } catch {
       setSubmitError("Something went wrong sending your reservation. Please try again, or call us.");
     }
