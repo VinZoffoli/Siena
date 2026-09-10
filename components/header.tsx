@@ -119,15 +119,15 @@ export default function Header() {
                     </nav>
 
                     {/* Right side */}
-                    <div className="flex items-center gap-2 md:gap-2 lg:gap-4">
-                        <Link href={ORDER_ONLINE_URL} target="_blank" rel="noopener noreferrer" className="hidden lg:block">
-                            <button className="cursor-pointer px-3 py-[11px] font-normal text-[12px] leading-[18px] tracking-wide border border-[#E0B265] bg-[#1B312E]/50 backdrop-blur-sm text-[#E0B265] transition hover:bg-[#E0B265] hover:text-[#1B312E] whitespace-nowrap">
+                    <div className="flex items-center gap-1.5 sm:gap-2 lg:gap-4">
+                        <Link href={ORDER_ONLINE_URL} target="_blank" rel="noopener noreferrer">
+                            <button className="cursor-pointer px-2 py-2 sm:px-3 sm:py-[11px] font-normal text-[10px] sm:text-[12px] leading-[16px] sm:leading-[18px] tracking-wide border border-[#E0B265] bg-[#1B312E]/50 backdrop-blur-sm text-[#E0B265] transition hover:bg-[#E0B265] hover:text-[#1B312E] whitespace-nowrap">
                                 ORDER ONLINE
                             </button>
                         </Link>
 
                         <Link href="/reservations">
-                            <button className="cursor-pointer px-4 lg:px-6 py-[11px] font-normal text-[12px] lg:text-[13px] leading-[18px] tracking-wide border transition bg-[#E0B265] text-[#1B312E] border-transparent hover:bg-white hover:text-[#1B312E] hover:border-white">
+                            <button className="cursor-pointer px-2.5 py-2 sm:px-4 lg:px-6 sm:py-[11px] font-normal text-[10px] sm:text-[12px] lg:text-[13px] leading-[16px] sm:leading-[18px] tracking-wide border transition bg-[#E0B265] text-[#1B312E] border-transparent hover:bg-white hover:text-[#1B312E] hover:border-white">
                                 RESERVATIONS
                             </button>
                         </Link>

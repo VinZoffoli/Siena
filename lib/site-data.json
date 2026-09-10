@@ -659,7 +659,7 @@
             },
             {
               "id": "723e3bfd-b5f6-4ad6-ade3-6367eef12f93",
-              "image": "",
+              "image": "/assets/menu/pistachio-creme-brulee.webp",
               "name": "Pistachio Creme Brulee",
               "description": "Classic vanilla bean crème brûlée with a perfectly caramelized sugar crust, finished with silky pistachio crème, delicate chocolate shavings, and crushed pistachios.",
               "price": "14",
@@ -781,7 +781,7 @@
           "items": [
             {
               "id": "hh-starters-hummus",
-              "image": "",
+              "image": "/assets/menu/hummus-happy-hour.webp",
               "name": "Hummus",
               "description": "Creamy chickpea dip, olive oil, and warm pita.",
               "price": "8",
@@ -801,7 +801,7 @@
             },
             {
               "id": "hh-starters-baba-ganoush",
-              "image": "",
+              "image": "/assets/menu/baba-ganoush-happy-hour.webp",
               "name": "Baba Ganoush",
               "description": "Smoked eggplant dip served with warm pita.",
               "price": "8",
@@ -821,7 +821,7 @@
             },
             {
               "id": "hh-starters-moussaka",
-              "image": "",
+              "image": "/assets/menu/moussaka-happy-hour.webp",
               "name": "Moussaka",
               "description": "Roasted eggplant, tomato, herbs, and warm pita.",
               "price": "9",
@@ -841,7 +841,7 @@
             },
             {
               "id": "hh-starters-whipped-feta",
-              "image": "",
+              "image": "/assets/menu/whipped-feta-happy-hour.webp",
               "name": "Whipped Feta",
               "description": "Creamy whipped feta served with warm pita.",
               "price": "9",
@@ -861,7 +861,7 @@
             },
             {
               "id": "hh-starters-crispy-cauliflower",
-              "image": "",
+              "image": "/assets/menu/crispy-cauliflower-happy-hour.webp",
               "name": "Crispy Cauliflower",
               "description": "Crispy cauliflower served with tahini aioli.",
               "price": "10",
@@ -881,7 +881,7 @@
             },
             {
               "id": "hh-starters-siena-fries",
-              "image": "",
+              "image": "/assets/menu/siena-fries-happy-hour.webp",
               "name": "Siena Fries",
               "description": "Crispy fries with Siena seasoning and dipping sauce.",
               "price": "8",
@@ -901,7 +901,7 @@
             },
             {
               "id": "hh-starters-calamari-fritti",
-              "image": "",
+              "image": "/assets/menu/calamari-fritti-happy-hour.webp",
               "name": "Calamari Fritti",
               "description": "Crispy calamari, fresh lemon, herbs, and dipping sauce.",
               "price": "12",
@@ -928,7 +928,7 @@
           "items": [
             {
               "id": "hh-salads-classic-caesar",
-              "image": "",
+              "image": "/assets/menu/caesar-salad-happy-hour.webp",
               "name": "Classic Caesar Salad",
               "description": "Romaine, Parmesan, croutons, and Caesar dressing.",
               "price": "9",
@@ -948,7 +948,7 @@
             },
             {
               "id": "hh-salads-mediterranean",
-              "image": "",
+              "image": "/assets/menu/mediterranean-salad-happy-hour.webp",
               "name": "Mediterranean Salad",
               "description": "Tomatoes, cucumber, olives, red onion, herbs, and house vinaigrette.",
               "price": "9",
@@ -968,7 +968,7 @@
             },
             {
               "id": "hh-salads-watermelon-feta",
-              "image": "",
+              "image": "/assets/menu/watermelon-feta-salad-happy-hour.webp",
               "name": "Watermelon & Feta Salad",
               "description": "Watermelon, feta, fresh herbs, and balsamic vinaigrette.",
               "price": "10",
@@ -988,7 +988,7 @@
             },
             {
               "id": "hh-pasta-rigatoni-vodka",
-              "image": "",
+              "image": "/assets/menu/rigatoni-alla-vodka-happy-hour.webp",
               "name": "Rigatoni alla Vodka",
               "description": "Rigatoni, creamy vodka sauce, Parmesan, and basil.",
               "price": "16",
@@ -1008,7 +1008,7 @@
             },
             {
               "id": "hh-skewers-chicken-tawook",
-              "image": "",
+              "image": "/assets/menu/chicken-tawook-skewer-happy-hour.webp",
               "name": "Chicken Tawook Skewer",
               "description": "Grilled marinated chicken skewer with tahini aioli.",
               "price": "17",
@@ -1028,7 +1028,7 @@
             },
             {
               "id": "hh-skewers-shrimp-kabob",
-              "image": "",
+              "image": "/assets/menu/shrimp-kabob-skewer-happy-hour.webp",
               "name": "Shrimp Kabob Skewer",
               "description": "Grilled shrimp skewer with herbs, citrus, and dipping sauce.",
               "price": "12",
