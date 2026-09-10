@@ -18,6 +18,7 @@ import {
   type WeekdaySchedule,
 } from "@/lib/hours";
 import { ReservationDatePicker } from "@/components/ReservationDatePicker";
+import { ORDER_ONLINE_URL } from "@/lib/order-menu";
 import LazyVideo from "@/components/LazyVideo";
 import { preload } from "react-dom";
 
@@ -193,7 +194,9 @@ export default function Home() {
           </form>
 
           <Link
-            href="/order-online"
+            href={ORDER_ONLINE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             className="hero-fadein group mt-4 inline-flex items-center gap-2 text-white/85 text-[13px] md:text-[14px] tracking-wide hover:text-[#e0b265] transition-colors"
           >
             <span className="border-b border-white/40 group-hover:border-[#e0b265] transition-colors">
@@ -1002,7 +1005,9 @@ export default function Home() {
                 </a>
 
                 <Link
-                  href="/order-online"
+                  href={ORDER_ONLINE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="group bg-[#e0b265] text-[#1b312e] px-4 md:px-9 py-2 font-normal text-[14px] md:text-[15px] leading-[20px] md:leading-[24px] flex items-center gap-2 w-fit border border-transparent hover:bg-white hover:text-[#1b312e] hover:border-white transition"
                 >
                   ORDER ONLINE

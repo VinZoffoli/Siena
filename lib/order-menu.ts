@@ -28,6 +28,13 @@ export interface TabData {
 const ALCOHOL_TAB_IDS = new Set(["libations", "wines", "spirits"]);
 const ALCOHOL_SUBSECTION_IDS = new Set(["to-drink"]);
 
+// Site-wide "Order Online" entry points (header, footer, homepage CTAs) send
+// customers to the real Toast ordering page for now. The in-house
+// /order-online + /checkout pages stay in the codebase (built, not removed)
+// but aren't linked from anywhere until a real payment backend exists —
+// switch this back to "/order-online" to re-enable them.
+export const ORDER_ONLINE_URL = "https://order.toasttab.com/online/siena-restaurant-bar-124-devore-road";
+
 export const orderTabs: TabData[] = (siteData.menuTabs as TabData[])
   .filter((t) => !ALCOHOL_TAB_IDS.has(t.id))
   .map((t) => ({

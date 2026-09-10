@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
+import { ORDER_ONLINE_URL } from "@/lib/order-menu";
 
 export default function Header() {
     const pathname = usePathname();
@@ -30,7 +31,7 @@ export default function Header() {
     const mobileLinks = [
         { href: "/", label: "Home" },
         { href: "/menus", label: "Menu" },
-        { href: "/order-online", label: "Order Online" },
+        { href: ORDER_ONLINE_URL, label: "Order Online" },
         { href: "/events", label: "Events" },
         { href: "/live-music-fridays", label: "Live Music Fridays" },
         { href: "/reservations", label: "Reservations" },
@@ -119,7 +120,7 @@ export default function Header() {
 
                     {/* Right side */}
                     <div className="flex items-center gap-2 md:gap-2 lg:gap-4">
-                        <Link href="/order-online" className="hidden lg:block">
+                        <Link href={ORDER_ONLINE_URL} target="_blank" rel="noopener noreferrer" className="hidden lg:block">
                             <button className="cursor-pointer px-3 py-[11px] font-normal text-[12px] leading-[18px] tracking-wide border border-[#E0B265] bg-[#1B312E]/50 backdrop-blur-sm text-[#E0B265] transition hover:bg-[#E0B265] hover:text-[#1B312E] whitespace-nowrap">
                                 ORDER ONLINE
                             </button>
@@ -221,11 +222,14 @@ export default function Header() {
                 <nav className="flex flex-col p-4 gap-1">
                     {mobileLinks.map((link) => {
                         const isActive = pathname === link.href;
+                        const isExternal = link.href.startsWith("http");
                         return (
                             <Link
                                 key={link.href}
                                 href={link.href}
                                 onClick={() => setMenuOpen(false)}
+                                target={isExternal ? "_blank" : undefined}
+                                rel={isExternal ? "noopener noreferrer" : undefined}
                                 className={`flex items-center justify-center px-4 py-4 text-[15px] font-semibold uppercase tracking-wide transition-colors duration-200 ${isActive
                                     ? "bg-[#E0B265]/15 text-[#E0B265]"
                                     : "text-white hover:bg-[#E0B265]/15 hover:text-[#E0B265]"

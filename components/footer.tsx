@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import NewsletterForm from "../components/newsletterform";
 import { getRestaurantInfo, RESTAURANT_FALLBACK, type RestaurantInfo } from "@/lib/restaurant";
 import { fetchGroupedHours, FALLBACK_HOURS, type GroupedHourEntry } from "@/lib/hours";
+import { ORDER_ONLINE_URL } from "@/lib/order-menu";
 
 // Re-fetch the live hours on this interval so the footer picks up changes
 // made on the reservations backend without needing a page reload.
@@ -104,7 +105,9 @@ export default function Footer() {
                         </a>
 
                         <a
-                            href="/order-online"
+                            href={ORDER_ONLINE_URL}
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="relative border border-[#e0b265] text-[#e0b265] px-[24px] py-[12px] h-[46px] font-normal text-[18px] lg:text-[15px] leading-[20px] flex items-center gap-2 w-fit overflow-hidden group uppercase hover:bg-[#e0b265] hover:text-[#1b312e] transition-colors duration-300"
                         >
                             <span>Order Online</span>
